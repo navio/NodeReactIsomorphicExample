@@ -1,21 +1,16 @@
 import React from 'react';
+import FastClick from 'fastclick';
 import App from './components/app'
 
-let app = <App
-      path={req.path}
-      context={{
-        onInsertCss: value => css.push(value),
-        onSetTitle: value => data.title = value,
-        onSetMeta: (key, value) => data[key] = value,
-        onPageNotFound: () => notFound = true
-      }} />;
+new Promise((resolve) => {
+    if (window.addEventListener) {
+      window.addEventListener('DOMContentLoaded', resolve);
+    } else {
+      window.attachEvent('onload', resolve);
+    }
+  }).then(run)
 
-
-function run() {
-
+function run(){
   let element = React.createElement(App, {});
-
   React.render(element, document.getElementById('app'));
 }
-
-run();
