@@ -2,6 +2,7 @@ var gulp = require("gulp");
 var babel = require("gulp-babel");
 var del = require('del');
 
+var cp = require('child_process');
 var browserify = require('browserify');
 var through2 = require('through2');
 var sourcemaps = require('gulp-sourcemaps');
