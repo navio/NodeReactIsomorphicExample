@@ -2,7 +2,6 @@ var gulp = require("gulp");
 var babel = require("gulp-babel");
 var del = require('del');
 
-
 var browserify = require('browserify');
 var through2 = require('through2');
 var sourcemaps = require('gulp-sourcemaps');
@@ -13,8 +12,15 @@ var paths = {
   server: ['src/server.js','src/**','!src/templates/**','!src/app.js'],
   images: 'assets/img/**/*',
   templates: 'src/templates/*.*',
-  toClean: ['.tmp', 'dist/*', '!dist/.git']
+  toClean: ['.tmp', 'dist/*', '!dist/.git'],
+  dist:'./dist'
 };
+
+gulp.task("default",['copy','scripts','uglify']);
+
+gulp.task("scripts",['client','server']);
+
+gulp.task('server',['babelize']);
 
 gulp.task('client', function () {
     return gulp.src(paths.client)
@@ -33,24 +39,23 @@ gulp.task('client', function () {
             this.emit('end');
         })
         .pipe(uglify())
-        .pipe(gulp.dest('./dist'));
+        .pipe(gulp.dest(paths.dist));
 });
 
-gulp.task("scripts",['client','server']);
-
-gulp.task("default",['copy','scripts']);
-
-gulp.task('server',['babelize']);
+gulp.task('uglify',function(){
+  return gulp.src(paths.dist+'/*.js')
+             .pipe(uglify())
+             .pipe(gulp.dest(paths.dist));
+});
 
 gulp.task('babelize',function(){
   return gulp.src(paths.server)
     .pipe(babel())
-    .pipe(gulp.dest("dist"));
+    .pipe(gulp.dest(paths.dist));
 });
 
-gulp.task('watch', function() {
+gulp.task('watch:scripts', function() {
   gulp.watch('src/**/*.*', ['scripts']);
-  //gulp.watch(paths.images, ['images']);
 });
 
 gulp.task('copy', ['clean'], function () {
