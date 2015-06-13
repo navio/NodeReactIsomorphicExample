@@ -23,7 +23,11 @@
     "browserify": "^10.2.4",
     "del": "^1.2.0",
     "gulp": "^3.9.0",
+    "gulp-babel": "^5.1.0",
     "gulp-rename": "^1.2.2",
+    "gulp-sourcemaps": "^1.5.2",
+    "gulp-uglify": "^1.2.0",
+    "through2": "^2.0.0",
     "watchify": "^3.2.2"
   }
 }

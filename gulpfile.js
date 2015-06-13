@@ -5,6 +5,8 @@ var del = require('del');
 
 var browserify = require('browserify');
 var through2 = require('through2');
+var sourcemaps = require('gulp-sourcemaps');
+var uglify = require('gulp-uglify');
 
 var paths = {
   client: 'src/app.js',
@@ -30,9 +32,10 @@ gulp.task('client', function () {
             console.log(error.stack);
             this.emit('end');
         })
-        // .pipe(require('gulp-rename')('bundle.js'))
+        .pipe(uglify())
         .pipe(gulp.dest('./dist'));
 });
+
 gulp.task("scripts",['client','server']);
 
 gulp.task("default",['copy','scripts']);
