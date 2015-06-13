@@ -2,56 +2,51 @@ var gulp = require("gulp");
 var babel = require("gulp-babel");
 var del = require('del');
 
-var sourcemaps = require('gulp-sourcemaps');
-var source = require('vinyl-source-stream');
-var buffer = require('vinyl-buffer');
+
 var browserify = require('browserify');
-var watchify = require('watchify');
-var babel = require('babelify');
+var through2 = require('through2');
 
 var paths = {
-  scripts: ['src/**/*.js', '!src/templates/**/*'],
+  client: 'src/app.js',
+  server: ['src/server.js','src/**','!src/templates/**','!src/app.js'],
   images: 'assets/img/**/*',
   templates: 'src/templates/*.*',
   toClean: ['.tmp', 'dist/*', '!dist/.git']
 };
 
-function compile(watch) {
-  var bundler = watchify(browserify('./src/app.js', { debug: true }).transform(babel));
+gulp.task('client', function () {
+    return gulp.src(paths.client)
+        .pipe(through2.obj(function (file, enc, next) {
+            browserify(file.path, { debug: true })
+                .transform(require('babelify'))
+                .bundle(function (err, res) {
+                    if (err) { return next(err); }
 
-  function rebundle() {
-    bundler.bundle()
-      .on('error', function(err) { console.error(err); this.emit('end'); })
-      .pipe(buffer())
-      .pipe(sourcemaps.init({ loadMaps: true }))
-      .pipe(sourcemaps.write('./'))
-      .pipe(gulp.dest('./dist'));
-  }
-
-  if (watch) {
-    bundler.on('update', function() {
-      console.log('-> bundling...');
-      rebundle();
-    });
-  }
-
-  rebundle();
-}
-
-gulp.task('build', function() { return compile(); });
+                    file.contents = res;
+                    next(null, file);
+                });
+        }))
+        .on('error', function (error) {
+            console.log(error.stack);
+            this.emit('end');
+        })
+        // .pipe(require('gulp-rename')('bundle.js'))
+        .pipe(gulp.dest('./dist'));
+});
+gulp.task("scripts",['client','server']);
 
 gulp.task("default",['copy','scripts']);
 
-gulp.task('scripts',['babelize']);
+gulp.task('server',['babelize']);
 
 gulp.task('babelize',function(){
-  return gulp.src(paths.scripts)
+  return gulp.src(paths.server)
     .pipe(babel())
     .pipe(gulp.dest("dist"));
 });
 
 gulp.task('watch', function() {
-  gulp.watch(paths.scripts, ['scripts']);
+  gulp.watch('src/**/*.*', ['scripts']);
   //gulp.watch(paths.images, ['images']);
 });
 

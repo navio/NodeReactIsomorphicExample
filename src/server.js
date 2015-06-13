@@ -18,6 +18,7 @@ data.body = data.body = React.renderToString(app);
 
 let html = template(data);
 
+server.get('/app.js', (req, res) => res.send(fs.readFileSync(path.join(__dirname, '/app.js'),'utf8')) );
 server.get('*', (req, res) => res.send(html) );
 
 server.listen(server.get('port'));

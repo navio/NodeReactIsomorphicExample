@@ -1,6 +1,6 @@
 import React from 'react';
 import FastClick from 'fastclick';
-import App from './components/app'
+import App from './components/app/app'
 
 new Promise((resolve) => {
     if (window.addEventListener) {
