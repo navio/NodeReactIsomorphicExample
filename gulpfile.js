@@ -17,6 +17,11 @@ var paths = {
   dist:'./dist'
 };
 
+gulp.task('run',function(){
+  var cp = require('child_process');
+  var child = cp.fork(paths.dist+'/server.js');
+});
+
 gulp.task("default",['copy','scripts','uglify']);
 
 gulp.task("scripts",['client','server']);

@@ -29,5 +29,8 @@
     "gulp-uglify": "^1.2.0",
     "through2": "^2.0.0",
     "watchify": "^3.2.2"
+  },
+  "scripts": {
+    "start": "gulp; node ./dist/server"
   }
 }
