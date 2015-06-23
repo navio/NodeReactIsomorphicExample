@@ -10,7 +10,12 @@ new Promise((resolve) => {
     }
   }).then(run)
 
+let path = decodeURI(window.location.pathname);
+
 function run(){
-  let element = React.createElement(App, {});
+
+
+  let element = React.createElement(App, { path : path  });
   React.render(element, document.getElementById('app'));
+
 }

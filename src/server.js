@@ -9,17 +9,29 @@ const server = express();
 
 server.set('port', (process.env.PORT || 8080));
 
+
+server.get('/app.js', (req, res) => res.send(fs.readFileSync(path.join(__dirname, '/app.js'),'utf8')) );
+//app.use(express.static('public'));
+//server.get('*', (req, res) => res.send(html) );
+
 const templateFile = path.join(__dirname, '/index.html');
 const template = _.template(fs.readFileSync(templateFile, 'utf8'));
 
-let app =<App />;
-let data = {};
-data.body = data.body = React.renderToString(app);
+server.use( (req, res) => {
 
-let html = template(data);
+  let app =<App path={req.path} />;
+  let data = {};
+  data.body = data.body = React.renderToString(app);
+  let html = template(data);
+  res.send(html)
 
-server.get('/app.js', (req, res) => res.send(fs.readFileSync(path.join(__dirname, '/app.js'),'utf8')) );
+});
 
-server.get('*', (req, res) => res.send(html) );
 
-server.listen(server.get('port'));
+server.listen(server.get('port'), () => {
+  if (process.send) {
+    process.send('online');
+  } else {
+    console.log('The server is running at http://localhost:' + server.get('port'));
+  }
+});
