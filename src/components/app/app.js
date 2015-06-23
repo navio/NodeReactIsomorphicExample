@@ -9,13 +9,12 @@ class App {
   componentWillUnmount() {
     window.removeEventListener('popstate', this.handlePopState);
   }
-  
+
   shouldComponentUpdate(nextProps) {
     return this.props.path !== nextProps.path;
   }
 
   render() {
-
     return (
       <div>
          Render Components! on {this.props.path}

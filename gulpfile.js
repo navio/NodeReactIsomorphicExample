@@ -43,7 +43,7 @@ gulp.task('server', ['default'], function(cb) {
         }
         if (!started) {
           started = true;
-          gulp.watch(paths.src, function() {
+          gulp.watch('dist/*', function() {
             console.log('Restarting development server.');
             server.kill('SIGTERM');
             server = startup();
